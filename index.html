@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Romiel | Editor de Fotos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="app-container">
+        <section class="main-content">
+            <div id="canvas-wrapper"></div>
+                <canvas id="editor-canvas" hidden>Tu navegador no soporta canvas.</canvas>
+                <article id="placeholder">
+                    <p>Carga una imagen para empezar a editar.</p>
+                </article>
+            </div>
+            <div id="zoom-controls" hidden>
+                <button id="zoom-out-button">-</button>
+                <span id="zoom-level">100%</span>
+                <button id="zoom-in-button">+</button>
+                <button id="fit-screen-button">Ajustar</button>
+            </div>
+        </section>
+        </section>
+
+        <aside class="sidebar">
+            <header>
+                <h1 class="brand-title">Romiel</h1>
+                <nav>
+                    <ul>
+                        <li>
+                            <label for="image-loader" class="contrast">Cargar Imagen</label>
+                            <input type="file" id="image-loader" name="image-loader" accept="image/*" style="display: none;"/>
+                        </li>
+                        <li>
+                            <button id="download-button" class="contrast">Descargar</button>
+                        </li>
+                         <li>
+                            <button id="reset-button" class="contrast outline">Resetear</button>
+                        </li>
+                    </ul>
+                </nav>
+                 <label class="theme-switcher">
+                    <input type="checkbox" id="theme-toggle" role="switch">
+                    Tema Oscuro/Claro
+                </label>
+            </header>
+            
+            <div id="controls-panel" class="controls-panel">
+                </div>
+        </aside>
+    </main>
+
+    <script src="lib/glfx.js" defer></script>
+    
+    <script type="module" src="dist/main.js" defer></script>
+</body>
+</html>

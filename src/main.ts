@@ -1,3 +1,5 @@
+import { analytics } from './analytics.js';
+
 declare var fx: any;
 
 const controlsConfig = {
@@ -56,6 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     themeToggle.checked = document.documentElement.getAttribute('data-theme') === 'dark';
     generateControls();
+    
+    analytics.startSession();
 });
 
 function handleImageUpload(event: Event): void {
@@ -76,6 +80,7 @@ function handleImageUpload(event: Event): void {
         originalImage.src = e.target?.result as string;
     };
     reader.readAsDataURL(file);
+    analytics.trackEvent('Image', 'Upload');
 }
 
 function applyZoom(): void {
@@ -210,6 +215,19 @@ function generateControls(): void {
                 requestAnimationFrame(renderRealtimePreview);
             });
 
+            slider.addEventListener('input', () => {
+                const value = parseFloat(slider.value);
+                editorState[control.name] = value;
+                document.getElementById(`value-${control.name}`)!.textContent = value.toFixed(2);
+                requestAnimationFrame(renderRealtimePreview);
+            });
+            
+            // Debounce analytics tracking
+            let timer: any;
+            slider.addEventListener('change', () => {
+                analytics.trackEvent('Control', 'Adjust', control.name);
+            });
+
             controlDiv.appendChild(label);
             controlDiv.appendChild(slider);
             details.appendChild(controlDiv);
@@ -222,6 +240,7 @@ function generateControls(): void {
 function handleThemeToggle(event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
     document.documentElement.setAttribute('data-theme', isChecked ? 'dark' : 'light');
+    analytics.trackEvent('UI', 'ThemeToggle', isChecked ? 'dark' : 'light');
 }
 
 function resetSection(groupName: string): void {
@@ -238,6 +257,7 @@ function resetSection(groupName: string): void {
 }
 
 function resetAll(): void {
+    analytics.trackEvent('UI', 'ResetAll');
     if (!originalImage) return;
     generateControls();
     renderRealtimePreview();
@@ -257,4 +277,5 @@ function handleDownload(): void {
     link.download = 'romiel-edit.jpg';
     link.href = downloadCanvas.toDataURL('image/jpeg', 0.95);
     link.click();
+    analytics.trackEvent('Image', 'Download');
 }
